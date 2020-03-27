@@ -1,4 +1,4 @@
-// @TODO: YOUR CODE HERE!
+
 
 var svgWidth = 900;
 var svgHeight = 500;
@@ -61,6 +61,7 @@ d3.csv("assets/data/data.csv").then(function(healthData) {
     chartGroup.append("g")
       .call(leftAxis);
 
+    //add circles
       var circles = svg.selectAll('circle')
       .data(healthData)
       .enter()
@@ -70,6 +71,7 @@ d3.csv("assets/data/data.csv").then(function(healthData) {
       .attr('r','10')
       .classed("stateCircle", true)
       .attr('stroke-width',1)
+      //adding mouseover event
       .on('mouseover', function () {
         d3.select(this)
           .transition()
@@ -85,7 +87,7 @@ d3.csv("assets/data/data.csv").then(function(healthData) {
           .attr('r',10)
           .attr('stroke-width',1)
       })
-
+      //add text
       var stateText = svg.selectAll("text")
       .data(healthData)
       .enter()
@@ -94,7 +96,7 @@ d3.csv("assets/data/data.csv").then(function(healthData) {
       .attr("y", d => yLinearScale(d.healthcare))
       .text(d=> d.abbr)
       .classed("stateText",true)
-      .style("font-size", "9px")
+      .style("font-size", "10px")
       .attr("dy", ".35em");
 
 
