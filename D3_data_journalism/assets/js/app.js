@@ -36,13 +36,13 @@ d3.csv("assets/data/data.csv").then(function(healthData) {
       data.poverty = +data.poverty;
       data.healthcare = +data.healthcare;
     });
+    console.log(healthData);
 
     // Step 2: Create scale functions
     // ==============================
     var xLinearScale = d3.scaleLinear()
-      .domain([20, d3.max(healthData, d => d.poverty)])
+      .domain([0, d3.max(healthData, d => d.poverty)])
       .range([0, width]);
-
     var yLinearScale = d3.scaleLinear()
       .domain([0, d3.max(healthData, d => d.healthcare)])
       .range([height, 0]);
@@ -61,47 +61,58 @@ d3.csv("assets/data/data.csv").then(function(healthData) {
     chartGroup.append("g")
       .call(leftAxis);
 
-    // Step 5: Create Circles
-    // ==============================
-    var circlesGroup = chartGroup.selectAll("circle")
-    .data(healthData)
-    .enter()
-    .append("circle")
-    .attr("cx", d => xLinearScale(d.poverty))
-    .attr("cy", d => yLinearScale(d.healthcare))
-    .attr("class", "stateCircle")
-    .attr("class", "stateText");
+    // // Step 5: Create Circles
+    // // ==============================
+    // var circlesGroup = chartGroup.selectAll("circle")
+    // .data(healthData)
+    // .enter()
+    // .append("circle")
+    // .attr("cx", d => xLinearScale(d.poverty))
+    // .attr("cy", d => yLinearScale(d.healthcare))
+    // .attr("class", "stateCircle")
+    // .attr("class", "stateText");
 
-    // Step 6: Initialize tool tip
-    // ==============================
-    var toolTip = d3.tip()
-      .attr("class", "tooltip")
-      .offset([80, -60])
-      .html(function(d) {
-        var state=d.state;
-        var povertyrate = +d.poverty;
-        var healthcare= +d.healthcare;
+    // // Step 6: Initialize tool tip
+    // // ==============================
+    // var toolTip = d3.tip()
+    //   .attr("class", "tooltip")
+    //   .offset([80, -60])
+    //   .html(function(d) {
+    //     var state=d.state;
+    //     var povertyrate = +d.poverty;
+    //     var healthcare= +d.healthcare;
 
-        return (`${state}<br>poverty level: ${poverty}<br>healthcare: ${healthcare}`);
-      });
+    //     return (`${state}<br>poverty level: ${poverty}<br>healthcare: ${healthcare}`);
+    //   });
 
     // Step 7: Create tooltip in the chart
     // ==============================
-    chartGroup.call(toolTip);
-
-    circlesGroup.on("mouseover", function(data) {
-      toolTip.show(data);
-    })
-      // onmouseout event
-      .on("mouseout", function(data, index) {
-        toolTip.hide(data);
-      });
+    // chartGroup.call(toolTip);
 
 
+  var circles = svg.selectAll('circle')
+      .data(healthData)
+      .enter()
+    .append('circle')
+      .attr('cx',function (d) { return xLinearScale(d.poverty) })
+      .attr('cy',function (d) { return yLinearScale(d.healthcare) })
+      .attr('r','10')
+      .attr('stroke','black')
+      .attr('stroke-width',1)
+
+    // // circlesGroup.on("mouseover", function(data) {
+    // //   toolTip.show(data);
+    // // })
+    //   // onmouseout event
+    //   .on("mouseout", function(data, index) {
+    //     toolTip.hide(data);
+    //   });
 
 
-      chart.append('g')
-      .call(leftAxis);
+
+
+    //   chart.append('g')
+    //   .call(leftAxis);
 
 
 
@@ -121,7 +132,7 @@ d3.csv("assets/data/data.csv").then(function(healthData) {
       .text("In Poverty (%)");
 
 
-    chart.append("text")
+    chartGroup.append("text")
 		  .style("text-anchor", "center")
 		  .attr("class", "axisText")
       .text("Healthcare and Poverty in the US");  
